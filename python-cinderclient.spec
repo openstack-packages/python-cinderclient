@@ -1,6 +1,6 @@
 Name:             python-cinderclient
 Version:          1.0.2
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Python API and CLI for OpenStack cinder
 
 Group:            Development/Languages
@@ -53,6 +53,9 @@ rm -fr %{buildroot}%{python_sitelib}/tests
 %{python_sitelib}/*.egg-info
 
 %changelog
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Mon Jan 14 2013 Eric Harney <eharney@redhat.com> 1.0.2-1
 - Add bash completion support
 - Update to latest client
