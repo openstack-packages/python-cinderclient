@@ -1,5 +1,5 @@
 Name:             python-cinderclient
-Version:          1.0.3
+Version:          1.0.4
 Release:          1%{?dist}
 Summary:          Python API and CLI for OpenStack cinder
 
@@ -9,7 +9,7 @@ URL:              http://github.com/openstack/python-cinderclient
 Source0:          http://tarballs.openstack.org/%{name}/%{name}-%{version}.tar.gz
 
 #
-# patches_base=0.2
+# patches_base=1.0.4
 #
 
 BuildArch:        noarch
@@ -53,6 +53,9 @@ rm -fr %{buildroot}%{python_sitelib}/tests
 %{python_sitelib}/*.egg-info
 
 %changelog
+* Mon May 13 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.4-1
+- Update to upstream version 1.0.4.
+
 * Tue Apr 02 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.3-1
 - Update to upstream version 1.0.3.
 
