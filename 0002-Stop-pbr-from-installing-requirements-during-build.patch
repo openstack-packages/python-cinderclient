@@ -1,0 +1,54 @@
+From 816ba2961cb5800ea2f0c8f7f76465a29c85e9c1 Mon Sep 17 00:00:00 2001
+From: Jakub Ruzicka <jruzicka@redhat.com>
+Date: Thu, 12 Sep 2013 16:14:40 +0200
+Subject: [PATCH] Stop pbr from installing requirements during build
+
+---
+ requirements.txt      |  6 ------
+ setup.py              |  1 -
+ test-requirements.txt | 13 -------------
+ 3 files changed, 20 deletions(-)
+ delete mode 100644 requirements.txt
+ delete mode 100644 test-requirements.txt
+
+diff --git a/requirements.txt b/requirements.txt
+deleted file mode 100644
+index 068a2f9..0000000
+--- a/requirements.txt
++++ /dev/null
+@@ -1,6 +0,0 @@
+-pbr>=0.5.16,<0.6
+-argparse
+-PrettyTable>=0.6,<0.8
+-requests>=1.1,<1.2.3
+-simplejson>=2.0.9
+-six
+diff --git a/setup.py b/setup.py
+index 15f4e9d..afab729 100644
+--- a/setup.py
++++ b/setup.py
+@@ -18,5 +18,4 @@
+ import setuptools
+ 
+ setuptools.setup(
+-    setup_requires=['pbr>=0.5.20'],
+     pbr=True)
+diff --git a/test-requirements.txt b/test-requirements.txt
+deleted file mode 100644
+index 30c33c0..0000000
+--- a/test-requirements.txt
++++ /dev/null
+@@ -1,13 +0,0 @@
+-# Install bounded pep8/pyflakes first, then let flake8 install
+-pep8==1.4.5
+-pyflakes==0.7.2
+-flake8==2.0
+-hacking>=0.5.6,<0.7
+-coverage>=3.6
+-discover
+-fixtures>=0.3.12
+-mock>=0.8.0
+-python-subunit
+-sphinx>=1.1.2
+-testtools>=0.9.32
+-testrepository>=0.0.17

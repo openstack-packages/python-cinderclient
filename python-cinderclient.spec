@@ -1,23 +1,31 @@
 Name:             python-cinderclient
-Version:          1.0.4
-Release:          2%{?dist}
+Version:          1.0.5
+Release:          1%{?dist}
 Summary:          Python API and CLI for OpenStack cinder
 
 Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://github.com/openstack/python-cinderclient
-Source0:          http://tarballs.openstack.org/%{name}/%{name}-%{version}.tar.gz
+Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
 #
-# patches_base=1.0.4
+# patches_base=1.0.5
 #
+Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
+Patch0002: 0002-Stop-pbr-from-installing-requirements-during-build.patch
 
 BuildArch:        noarch
-BuildRequires:    python-setuptools
 
-Requires:         python-httplib2
+BuildRequires:    python2-devel
+BuildRequires:    python-setuptools
+BuildRequires:    python-pbr
+BuildRequires:    python-d2to1
+
 Requires:         python-prettytable
+Requires:         python-requests
 Requires:         python-setuptools
+Requires:         python-simplejson
+Requires:         python-six
 
 %description
 This is a client for the OpenStack cinder API. There's a Python API (the
@@ -27,8 +35,11 @@ cinderclient module), and a command-line script (cinder). Each implements
 %prep
 %setup -q
 
-# TODO: Have the following handle multi line entries
-sed -i '/setup_requires/d; /install_requires/d; /dependency_links/d' setup.py
+%patch0001 -p1
+%patch0002 -p1
+
+# We provide version like this in order to remove runtime dep on pbr.
+sed -i s/REDHATCINDERCLIENTVERSION/%{version}/ cinderclient/__init__.py
 
 # Remove bundled egg-info
 rm -rf python_cinderclient.egg-info
@@ -42,17 +53,22 @@ rm -rf python_cinderclient.egg-info
 install -p -D -m 644 tools/cinder.bash_completion %{buildroot}%{_sysconfdir}/bash_completion.d/cinder.bash_completion
 
 # Delete tests
-rm -fr %{buildroot}%{python_sitelib}/tests
+rm -fr %{buildroot}%{python_sitelib}/cinderclient/tests
 
 %files
-%{_sysconfdir}/bash_completion.d/cinder.bash_completion
-%doc README.rst
-%doc LICENSE
+%doc LICENSE README.rst
 %{_bindir}/cinder
 %{python_sitelib}/cinderclient
 %{python_sitelib}/*.egg-info
+%{_sysconfdir}/bash_completion.d/cinder.bash_completion
 
 %changelog
+* Thu Sep 12 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.5-1
+- Update to upstream version 1.0.5.
+- Update dependencies.
+- Remove runtime dependency on python-pbr.
+- Change Source0 to PyPI.
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
