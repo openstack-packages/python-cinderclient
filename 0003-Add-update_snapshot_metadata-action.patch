@@ -1,0 +1,162 @@
+From b47e2d3f80529b391609f05cf0b92d846b1761d4 Mon Sep 17 00:00:00 2001
+From: Eric Harney <eharney@redhat.com>
+Date: Tue, 23 Jul 2013 12:51:49 -0400
+Subject: [PATCH] Add update_snapshot_metadata action
+
+This allows Nova to update the state and progress of a snapshot that
+it is manipulating.
+
+Also fix formatting bug in AssertionError in post_snapshots_1234_action.
+
+Implements blueprint qemu-assisted-snapshots
+
+Change-Id: Ia108e14870410b783c5d074db89acb94e83fce99
+---
+ cinderclient/tests/v1/fakes.py                 |  4 ++-
+ cinderclient/tests/v1/test_snapshot_actions.py | 35 ++++++++++++++++++++++++++
+ cinderclient/tests/v2/fakes.py                 |  4 ++-
+ cinderclient/tests/v2/test_snapshot_actions.py | 35 ++++++++++++++++++++++++++
+ cinderclient/v1/volume_snapshots.py            |  4 +++
+ cinderclient/v2/volume_snapshots.py            |  4 +++
+ 6 files changed, 84 insertions(+), 2 deletions(-)
+ create mode 100644 cinderclient/tests/v1/test_snapshot_actions.py
+ create mode 100644 cinderclient/tests/v2/test_snapshot_actions.py
+
+diff --git a/cinderclient/tests/v1/fakes.py b/cinderclient/tests/v1/fakes.py
+index c83f5ad..2c4eaa4 100644
+--- a/cinderclient/tests/v1/fakes.py
++++ b/cinderclient/tests/v1/fakes.py
+@@ -244,8 +244,10 @@ class FakeHTTPClient(base_client.HTTPClient):
+         action = body.keys()[0]
+         if action == 'os-reset_status':
+             assert 'status' in body['os-reset_status']
++        elif action == 'os-update_snapshot_status':
++            assert 'status' in body['os-update_snapshot_status']
+         else:
+-            raise AssertionError('Unexpected action: %s" % action')
++            raise AssertionError("Unexpected action: %s" % action)
+         return (resp, {}, _body)
+ 
+     #
+diff --git a/cinderclient/tests/v1/test_snapshot_actions.py b/cinderclient/tests/v1/test_snapshot_actions.py
+new file mode 100644
+index 0000000..70b14e1
+--- /dev/null
++++ b/cinderclient/tests/v1/test_snapshot_actions.py
+@@ -0,0 +1,35 @@
++# Copyright 2013 Red Hat, Inc.
++# All Rights Reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from cinderclient.tests import utils
++from cinderclient.tests.v1 import fakes
++
++
++cs = fakes.FakeClient()
++
++
++class SnapshotActionsTest(utils.TestCase):
++    def test_update_snapshot_status(self):
++        s = cs.volume_snapshots.get('1234')
++        cs.volume_snapshots.update_snapshot_status(s,
++                                                   {'status': 'available'})
++        cs.assert_called('POST', '/snapshots/1234/action')
++
++    def test_update_snapshot_status_with_progress(self):
++        s = cs.volume_snapshots.get('1234')
++        cs.volume_snapshots.update_snapshot_status(s,
++                                                   {'status': 'available',
++                                                    'progress': '73%'})
++        cs.assert_called('POST', '/snapshots/1234/action')
+diff --git a/cinderclient/tests/v2/fakes.py b/cinderclient/tests/v2/fakes.py
+index 8f70e09..82fb6e2 100644
+--- a/cinderclient/tests/v2/fakes.py
++++ b/cinderclient/tests/v2/fakes.py
+@@ -251,8 +251,10 @@ class FakeHTTPClient(base_client.HTTPClient):
+         action = body.keys()[0]
+         if action == 'os-reset_status':
+             assert 'status' in body['os-reset_status']
++        elif action == 'os-update_snapshot_status':
++            assert 'status' in body['os-update_snapshot_status']
+         else:
+-            raise AssertionError('Unexpected action: %s" % action')
++            raise AssertionError('Unexpected action: %s' % action)
+         return (resp, {}, _body)
+ 
+     #
+diff --git a/cinderclient/tests/v2/test_snapshot_actions.py b/cinderclient/tests/v2/test_snapshot_actions.py
+new file mode 100644
+index 0000000..f70cc8f
+--- /dev/null
++++ b/cinderclient/tests/v2/test_snapshot_actions.py
+@@ -0,0 +1,35 @@
++# Copyright 2013 Red Hat, Inc.
++# All Rights Reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from cinderclient.tests import utils
++from cinderclient.tests.v2 import fakes
++
++
++cs = fakes.FakeClient()
++
++
++class SnapshotActionsTest(utils.TestCase):
++    def test_update_snapshot_status(self):
++        s = cs.volume_snapshots.get('1234')
++        cs.volume_snapshots.update_snapshot_status(s,
++                                                   {'status': 'available'})
++        cs.assert_called('POST', '/snapshots/1234/action')
++
++    def test_update_snapshot_status_with_progress(self):
++        s = cs.volume_snapshots.get('1234')
++        cs.volume_snapshots.update_snapshot_status(s,
++                                                   {'status': 'available',
++                                                    'progress': '73%'})
++        cs.assert_called('POST', '/snapshots/1234/action')
+diff --git a/cinderclient/v1/volume_snapshots.py b/cinderclient/v1/volume_snapshots.py
+index 63e92c8..0aa6495 100644
+--- a/cinderclient/v1/volume_snapshots.py
++++ b/cinderclient/v1/volume_snapshots.py
+@@ -148,3 +148,7 @@ class SnapshotManager(base.ManagerWithFind):
+         self.run_hooks('modify_body_for_action', body, **kwargs)
+         url = '/snapshots/%s/action' % base.getid(snapshot)
+         return self.api.client.post(url, body=body)
++
++    def update_snapshot_status(self, snapshot, update_dict):
++        return self._action('os-update_snapshot_status',
++                            base.getid(snapshot), update_dict)
+diff --git a/cinderclient/v2/volume_snapshots.py b/cinderclient/v2/volume_snapshots.py
+index ef529eb..7aa9097 100644
+--- a/cinderclient/v2/volume_snapshots.py
++++ b/cinderclient/v2/volume_snapshots.py
+@@ -133,3 +133,7 @@ class SnapshotManager(base.ManagerWithFind):
+         self.run_hooks('modify_body_for_action', body, **kwargs)
+         url = '/snapshots/%s/action' % base.getid(snapshot)
+         return self.api.client.post(url, body=body)
++
++    def update_snapshot_status(self, snapshot, update_dict):
++        return self._action('os-update_snapshot_status',
++                            base.getid(snapshot), update_dict)
