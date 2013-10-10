@@ -1,6 +1,6 @@
 Name:             python-cinderclient
-Version:          1.0.5
-Release:          2%{?dist}
+Version:          1.0.6
+Release:          1%{?dist}
 Summary:          Python API and CLI for OpenStack cinder
 
 Group:            Development/Languages
@@ -9,11 +9,10 @@ URL:              http://github.com/openstack/python-cinderclient
 Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
 #
-# patches_base=1.0.5
+# patches_base=1.0.6
 #
 Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
 Patch0002: 0002-Stop-pbr-from-installing-requirements-during-build.patch
-Patch0003: 0003-Add-update_snapshot_metadata-action.patch
 
 BuildArch:        noarch
 
@@ -22,6 +21,7 @@ BuildRequires:    python-setuptools
 BuildRequires:    python-pbr
 BuildRequires:    python-d2to1
 
+Requires:         python-babel
 Requires:         python-prettytable
 Requires:         python-requests
 Requires:         python-setuptools
@@ -38,7 +38,6 @@ cinderclient module), and a command-line script (cinder). Each implements
 
 %patch0001 -p1
 %patch0002 -p1
-%patch0003 -p1
 
 # We provide version like this in order to remove runtime dep on pbr.
 sed -i s/REDHATCINDERCLIENTVERSION/%{version}/ cinderclient/__init__.py
@@ -65,6 +64,9 @@ rm -fr %{buildroot}%{python_sitelib}/cinderclient/tests
 %{_sysconfdir}/bash_completion.d/cinder.bash_completion
 
 %changelog
+* Thu Oct 10 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.6-1
+- Update to upstream 1.0.6
+
 * Thu Sep 19 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.5-2
 - Add update_snapshot_metadata action
 
