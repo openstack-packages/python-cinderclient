@@ -126,7 +126,7 @@ rm -fr html/.doctrees html/.buildinfo
 - Add bash completion support
 - Update to latest client
 
-* Mon Sep 25 2012 Pádraig Brady <P@draigBrady.com> 0.2.26-1
+* Tue Sep 25 2012 Pádraig Brady <P@draigBrady.com> 0.2.26-1
 - Update to latest client to support latest cinder
 
 * Mon Sep  3 2012 Pádraig Brady <P@draigBrady.com> 0.2-2
