@@ -1,0 +1,44 @@
+From ac164f61ed0608d7214586b6fa860188161dfb4f Mon Sep 17 00:00:00 2001
+From: Eric Harney <eharney@redhat.com>
+Date: Wed, 9 Oct 2013 17:26:34 -0400
+Subject: [PATCH] Fix DeprecationWarning when printing exception
+
+On Python 2.6, this results in an error like:
+/usr/lib/python2.6/site-packages/cinderclient/shell.py:524:
+DeprecationWarning: BaseException.message has been deprecated as of
+Python 2.6
+  message = e.message
+
+Should use the method from novaclient commit 8c4e145b92, which
+works well with python2 and python3.
+
+Change-Id: Ifbd78ad158ae87670bdee4e247469091efaa3260
+---
+ cinderclient/shell.py | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/cinderclient/shell.py b/cinderclient/shell.py
+index c9c1529..89ba346 100644
+--- a/cinderclient/shell.py
++++ b/cinderclient/shell.py
+@@ -29,8 +29,6 @@ import pkgutil
+ import sys
+ import logging
+ 
+-import six
+-
+ from cinderclient import client
+ from cinderclient import exceptions as exc
+ import cinderclient.extension
+@@ -521,10 +519,7 @@ def main():
+         sys.exit(130)
+     except Exception as e:
+         logger.debug(e, exc_info=1)
+-        message = e.message
+-        if not isinstance(message, six.string_types):
+-            message = str(message)
+-        print("ERROR: %s" % strutils.safe_encode(message), file=sys.stderr)
++        print("ERROR: %s" % strutils.six.text_type(e), file=sys.stderr)
+         sys.exit(1)
+ 
+ 

@@ -1,7 +1,7 @@
 Name:             python-cinderclient
 Version:          1.0.6
-Release:          1%{?dist}
-Summary:          Python API and CLI for OpenStack cinder
+Release:          2%{?dist}
+Summary:          Python API and CLI for OpenStack Cinder
 
 Group:            Development/Languages
 License:          ASL 2.0
@@ -13,6 +13,7 @@ Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{ver
 #
 Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
 Patch0002: 0002-Stop-pbr-from-installing-requirements-during-build.patch
+Patch0003: 0003-Fix-DeprecationWarning-when-printing-exception.patch
 
 BuildArch:        noarch
 
@@ -29,15 +30,29 @@ Requires:         python-simplejson
 Requires:         python-six
 
 %description
-This is a client for the OpenStack cinder API. There's a Python API (the
-cinderclient module), and a command-line script (cinder). Each implements
-100% of the OpenStack cinder API.
+Client library (cinderclient python module) and command line utility
+(cinder) for interacting with OpenStack Cinder (Block Storage) API.
+
+
+%package doc
+Summary:          Documentation for OpenStack Nova API Client
+Group:            Documentation
+
+BuildRequires:    python-sphinx
+
+%description      doc
+Client library (cinderclient python module) and command line utility
+(cinder) for interacting with OpenStack Cinder (Block Storage) API.
+
+This package contains auto-generated documentation.
+
 
 %prep
 %setup -q
 
 %patch0001 -p1
 %patch0002 -p1
+%patch0003 -p1
 
 # We provide version like this in order to remove runtime dep on pbr.
 sed -i s/REDHATCINDERCLIENTVERSION/%{version}/ cinderclient/__init__.py
@@ -56,14 +71,33 @@ install -p -D -m 644 tools/cinder.bash_completion %{buildroot}%{_sysconfdir}/bas
 # Delete tests
 rm -fr %{buildroot}%{python_sitelib}/cinderclient/tests
 
+export PYTHONPATH="$( pwd ):$PYTHONPATH"
+sphinx-build -b html doc/source html
+sphinx-build -b man doc/source man
+
+install -p -D -m 644 man/cinder.1 %{buildroot}%{_mandir}/man1/cinder.1
+
+# Fix hidden-file-or-dir warnings
+rm -fr html/.doctrees html/.buildinfo
+
 %files
 %doc LICENSE README.rst
 %{_bindir}/cinder
 %{python_sitelib}/cinderclient
 %{python_sitelib}/*.egg-info
 %{_sysconfdir}/bash_completion.d/cinder.bash_completion
+%{_mandir}/man1/cinder.1*
+
+%files doc
+%doc html
 
 %changelog
+* Wed Oct 23 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.6-2
+- Fix DeprecationWarning when printing exception
+- Provide -doc package with auto-generated documentation
+- Provide upstream manpage
+- Improve package description
+
 * Thu Oct 10 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.6-1
 - Update to upstream 1.0.6
 
