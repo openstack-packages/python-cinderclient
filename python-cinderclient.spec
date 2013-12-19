@@ -1,6 +1,6 @@
 Name:             python-cinderclient
 Version:          1.0.7
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Python API and CLI for OpenStack Cinder
 
 Group:            Development/Languages
@@ -13,6 +13,7 @@ Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{ver
 #
 Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
 Patch0002: 0002-Stop-pbr-from-installing-requirements-during-build.patch
+Patch0003: 0003-Add-search_opts-into-the-method-list-for-VolumeTypeM.patch
 
 BuildArch:        noarch
 
@@ -51,6 +52,7 @@ This package contains auto-generated documentation.
 
 %patch0001 -p1
 %patch0002 -p1
+%patch0003 -p1
 
 # We provide version like this in order to remove runtime dep on pbr.
 sed -i s/REDHATCINDERCLIENTVERSION/%{version}/ cinderclient/__init__.py
@@ -90,6 +92,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Thu Dec 19 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.7-2
+- Add search_opts into the method list() for VolumeTypeManager (rhbz#1048326)
+
 * Wed Nov 06 2013 Jakub Ruzicka <jruzicka@redhat.com> 1.0.7-1
 - Update to upstream version 1.0.7
 
