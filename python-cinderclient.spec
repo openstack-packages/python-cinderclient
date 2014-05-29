@@ -1,5 +1,5 @@
 Name:             python-cinderclient
-Version:          1.0.8
+Version:          1.0.9
 Release:          1%{?dist}
 Summary:          Python API and CLI for OpenStack Cinder
 
@@ -9,7 +9,7 @@ URL:              http://github.com/openstack/python-cinderclient
 Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
 #
-# patches_base=1.0.8
+# patches_base=1.0.9
 #
 Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
 Patch0002: 0002-Stop-pbr-from-installing-requirements-during-build.patch
@@ -93,6 +93,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Thu May 29 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.9-1
+- Update to upstream 1.0.9
+
 * Tue Mar 25 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.8-1
 - Update to upstream 1.0.8
 - Remove {test-,}requirements.txt in .spec instead of patch

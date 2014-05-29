@@ -1,4 +1,4 @@
-From c88b9236d976020420391771e48f3f9f197816f8 Mon Sep 17 00:00:00 2001
+From a0d236fcdeffe71aeac201c3fdb90785b63276ab Mon Sep 17 00:00:00 2001
 From: Jakub Ruzicka <jruzicka@redhat.com>
 Date: Thu, 12 Sep 2013 16:14:40 +0200
 Subject: [PATCH] Stop pbr from installing requirements during build
