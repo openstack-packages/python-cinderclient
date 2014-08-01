@@ -47,7 +47,7 @@ This package contains auto-generated documentation.
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{upstream_version}
 
 %patch0001 -p1
 %patch0002 -p1
