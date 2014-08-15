@@ -38,6 +38,7 @@ Summary:          Documentation for OpenStack Nova API Client
 Group:            Documentation
 
 BuildRequires:    python-sphinx
+BuildRequires:    python-oslo-sphinx
 
 %description      doc
 Client library (cinderclient python module) and command line utility
@@ -93,6 +94,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Fri Aug 15 2014 Derek Higgins <derekh@redhat.com> - XXX
+- Add dependency on python-oslo-sphinx
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
