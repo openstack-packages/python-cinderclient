@@ -1,7 +1,7 @@
-From 5648953e5eebf67bdcdd0b23ba8ef869e1f15c3e Mon Sep 17 00:00:00 2001
+From bf8068022d3e312abb54e36b7d07563f748d108d Mon Sep 17 00:00:00 2001
 From: Jakub Ruzicka <jruzicka@redhat.com>
 Date: Thu, 12 Sep 2013 16:14:40 +0200
-Subject: [PATCH 2/2] Stop pbr from installing requirements during build
+Subject: [PATCH] Stop pbr from installing requirements during build
 
 ---
  setup.py | 1 -
@@ -17,6 +17,3 @@ index 7363757..09230a0 100644
  setuptools.setup(
 -    setup_requires=['pbr'],
      pbr=True)
--- 
-1.9.3
-

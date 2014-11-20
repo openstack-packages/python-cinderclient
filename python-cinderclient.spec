@@ -1,6 +1,6 @@
 Name:             python-cinderclient
-Version:          1.0.9
-Release:          2%{?dist}
+Version:          XXX
+Release:          XXX{?dist}
 Summary:          Python API and CLI for OpenStack Cinder
 
 Group:            Development/Languages
@@ -8,9 +8,6 @@ License:          ASL 2.0
 URL:              http://github.com/openstack/python-cinderclient
 Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
-#
-# patches_base=1.0.9
-#
 Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
 Patch0002: 0002-Stop-pbr-from-installing-requirements-during-build.patch
 
@@ -94,8 +91,10 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
-* Fri Aug 15 2014 Derek Higgins <derekh@redhat.com> - XXX
-- Add dependency on python-oslo-sphinx
+* Mon Oct 13 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.1.1-1
+- Update to upstream 1.1.1
+- New -doc BuildRequires: python-oslo-sphinx
+- oslosphinx -> oslo.sphinx fix
 
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
