@@ -31,7 +31,7 @@ Client library (cinderclient python module) and command line utility
 
 
 %package doc
-Summary:          Documentation for OpenStack Nova API Client
+Summary:          Documentation for OpenStack Cinder API Client
 Group:            Documentation
 
 BuildRequires:    python-sphinx
@@ -91,6 +91,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Wed Mar 04 2015 Chandan Kumar <chkumar246@gmail.com> 1.1.1-2
+- Fixed doc typo
+
 * Mon Oct 13 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.1.1-1
 - Update to upstream 1.1.1
 - New -doc BuildRequires: python-oslo-sphinx
