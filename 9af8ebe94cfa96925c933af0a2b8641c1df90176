@@ -1,0 +1,7 @@
+Verified+1: rdo-ci-jenkins <whayutin+rdocijenkins@redhat.com>
+Code-Review+2: Javier Peña <jpena@redhat.com>
+Submitted-by: Javier Peña <jpena@redhat.com>
+Submitted-at: Fri, 18 Sep 2015 18:36:02 +0200
+Reviewed-on: https://review.gerrithub.io/246992
+Project: openstack-packages/python-cinderclient
+Branch: refs/heads/rpm-master
