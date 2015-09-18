@@ -3,7 +3,6 @@ Version:          XXX
 Release:          XXX
 Summary:          Python API and CLI for OpenStack Cinder
 
-Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://github.com/openstack/python-cinderclient
 Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
@@ -53,15 +52,15 @@ rm -rf python_cinderclient.egg-info
 rm -f {,test-}requirements.txt
 
 %build
-%{__python} setup.py build
+%{__python2} setup.py build
 
 %install
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
 install -p -D -m 644 tools/cinder.bash_completion %{buildroot}%{_sysconfdir}/bash_completion.d/cinder.bash_completion
 
 # Delete tests
-rm -fr %{buildroot}%{python_sitelib}/cinderclient/tests
+rm -fr %{buildroot}%{python2_sitelib}/cinderclient/tests
 
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 sphinx-build -b html doc/source html
@@ -75,8 +74,8 @@ rm -fr html/.doctrees html/.buildinfo
 %files
 %doc LICENSE README.rst
 %{_bindir}/cinder
-%{python_sitelib}/cinderclient
-%{python_sitelib}/*.egg-info
+%{python2_sitelib}/cinderclient
+%{python2_sitelib}/*.egg-info
 %{_sysconfdir}/bash_completion.d/cinder.bash_completion
 %{_mandir}/man1/cinder.1*
 
