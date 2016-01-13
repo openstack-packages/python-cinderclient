@@ -9,6 +9,7 @@ Source0:          http://pypi.python.org/packages/source/p/%{name}/%{name}-%{ver
 
 BuildArch:        noarch
 
+BuildRequires:    git
 BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-pbr
@@ -32,6 +33,7 @@ Client library (cinderclient python module) and command line utility
 Summary:          Documentation for OpenStack Cinder API Client
 Group:            Documentation
 
+BuildRequires:    python-reno
 BuildRequires:    python-sphinx
 BuildRequires:    python-oslo-sphinx
 
@@ -43,7 +45,7 @@ This package contains auto-generated documentation.
 
 
 %prep
-%setup -q -n %{name}-%{upstream_version}
+%autosetup -c -n %{name}-%{upstream_version} -S git
 
 # Remove bundled egg-info
 rm -rf python_cinderclient.egg-info
